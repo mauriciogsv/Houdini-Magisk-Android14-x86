@@ -1,0 +1,7 @@
+id=houdini_android14_x86
+name=Houdini ARM Translation (Android 14 x86_64)
+version=1.0
+versionCode=1
+author=mauriciogsv
+description=Safe Houdini module for Android 14 x86_64 - Enables ARM app support via Magisk
+support=https://github.com/mauriciogsv/Houdini-Magisk-Android14-x86
