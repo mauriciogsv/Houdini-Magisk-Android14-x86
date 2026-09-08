@@ -1,0 +1,112 @@
+PROMPT PARA COPIAR Y PEGAR EN IA (CHATGPT, CLAUDE, GEMINI)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Copia TODO esto exactamente en tu IA:
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Necesito inyectar Houdini v145 en Bliss OS Android 14 x86_64.
+
+TENGO:
+✓ Linux Mint
+✓ ADB instalado
+✓ Bliss OS 17.2 con Magisk
+✓ Bliss OS conectado via USB o VirtualBox
+
+QUIERO:
+Descargar Houdini v145, preparar módulo Magisk y transferir a Bliss OS automáticamente.
+
+EXACTOS COMANDOS QUE NECESITO (ejecuta TODOS EN ORDEN):
+
+---INICIO---
+
+#!/bin/bash
+set -e
+
+echo "[1/10] Crear directorio..."
+mkdir -p ~/houdini_v145_build && cd ~/houdini_v145_build
+echo "✓ OK"
+
+echo "[2/10] Descargar Houdini v145..."
+wget -q https://github.com/Rprop/libhoudini/releases/download/v145_brya/houdini.tar.gz -O houdini_v145.tar.gz
+echo "✓ OK"
+
+echo "[3/10] Extraer..."
+tar -xzf houdini_v145.tar.gz
+echo "✓ OK"
+
+echo "[4/10] Verificar archivos..."
+ls -lh system/lib/arm/libhoudini.so || { echo "✗ ERROR"; exit 1; }
+ls -lh system/lib64/arm64/libhoudini.so || { echo "✗ ERROR"; exit 1; }
+echo "✓ OK"
+
+echo "[5/10] Descargar módulo Magisk..."
+git clone -q https://github.com/mauriciogsv/Houdini-Magisk-Android14-x86.git magisk_houdini_module 2>/dev/null || {
+    wget -q https://github.com/mauriciogsv/Houdini-Magisk-Android14-x86/archive/refs/heads/main.zip
+    unzip -q main.zip
+    mv Houdini-Magisk-Android14-x86-main magisk_houdini_module
+}
+echo "✓ OK"
+
+echo "[6/10] Copiar Houdini al módulo..."
+rm -rf magisk_houdini_module/system
+cp -r system magisk_houdini_module/
+echo "✓ OK"
+
+echo "[7/10] Verificar módulo..."
+ls magisk_houdini_module/module.prop || { echo "✗ ERROR"; exit 1; }
+ls magisk_houdini_module/system/lib/arm/libhoudini.so || { echo "✗ ERROR"; exit 1; }
+ls magisk_houdini_module/system/lib64/arm64/libhoudini.so || { echo "✗ ERROR"; exit 1; }
+echo "✓ OK"
+
+echo "[8/10] Crear ZIP..."
+cd magisk_houdini_module
+zip -r -q ../houdini_v145_FINAL.zip module.prop system.prop service.sh customize.sh install.sh system/
+cd ..
+echo "✓ OK"
+
+echo "[9/10] Verificar ZIP..."
+ls -lh houdini_v145_FINAL.zip || { echo "✗ ERROR"; exit 1; }
+echo "Estructura:"
+unzip -l houdini_v145_FINAL.zip | head -12
+echo "✓ OK"
+
+echo "[10/10] Transferir a Bliss OS..."
+adb root
+sleep 1
+adb push houdini_v145_FINAL.zip /sdcard/Download/
+echo "✓ OK"
+
+echo ""
+echo "═══════════════════════════════════════════════════════════════════════════════"
+echo "  ✓ TODO LISTO EN BLISS OS"
+echo "═══════════════════════════════════════════════════════════════════════════════"
+echo ""
+echo "ZIP creado: ~/houdini_v145_build/houdini_v145_FINAL.zip"
+echo "Ubicación en Bliss OS: /sdcard/Download/houdini_v145_FINAL.zip"
+echo ""
+echo "PRÓXIMOS PASOS EN BLISS OS:"
+echo "1. Abre Magisk Manager"
+echo "2. Presiona '+' (Install from Storage)"
+echo "3. Selecciona /sdcard/Download/houdini_v145_FINAL.zip"
+echo "4. INSTALL"
+echo "5. RESTART"
+echo ""
+echo "VERIFICAR DESPUÉS:"
+echo "getprop ro.enable.native.bridge.exec (debe ser 1)"
+echo "getprop ro.enable.native.bridge.exec64 (debe ser 1)"
+echo "magisk module list (debe aparecer houdini_android14_x86)"
+echo ""
+
+---FIN---
+
+POR FAVOR:
+✓ Copia ese script exactamente
+✓ Ejecútalo en Linux Mint
+✓ Muéstrame cada resultado
+✓ Si hay error, DETENTE y cuéntame
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ESO ES TODO. Pega esto en tu IA y hazlo.
